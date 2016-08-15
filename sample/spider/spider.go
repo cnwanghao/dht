@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/shiyanhui/dht"
+	"net/http"
+	_ "net/http/pprof"
 )
 
 type file struct {
@@ -20,6 +22,10 @@ type bitTorrent struct {
 }
 
 func main() {
+	go func() {
+		http.ListenAndServe(":6060", nil)
+	}()
+
 	w := dht.NewWire(65536)
 	go func() {
 		for resp := range w.Response() {
